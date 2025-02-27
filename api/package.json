@@ -5,7 +5,11 @@
     "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "hono": "^4.7.2"
+    "@azure/openai": "^2.0.0",
+    "@types/node-fetch": "^2.6.12",
+    "hono": "^x.x.x",
+    "node-fetch": "^3.3.2",
+    "openai": "^4.85.3"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250109.0",
