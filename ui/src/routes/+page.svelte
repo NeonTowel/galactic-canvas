@@ -3,6 +3,7 @@
   let imageUrl = '';
   let loading = false;
   let error = '';
+  let apiKey = import.meta.env.TOKEN;
 
   async function generateImage() {
     if (!prompt) {
@@ -15,10 +16,11 @@
     imageUrl = '';
 
     try {
-      const response = await fetch('/generate-image', {
+      const response = await fetch('/api/generate-image', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({ prompt })
       });
