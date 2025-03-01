@@ -3,9 +3,10 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "wrangler dev",
-    "deploy": "wrangler deploy --minify",
-    "postinstall": "git config core.hooksPath .githooks"
+    "start:dev": "wrangler dev --config wrangler.dev.toml",
+    "start:prod": "wrangler dev --config wrangler.prod.toml",
+    "deploy:dev": "wrangler deploy --config wrangler.dev.toml --minify",
+    "deploy:prod": "wrangler deploy --config wrangler.prod.toml --minify"
   },
   "dependencies": {
     "@azure/openai": "^2.0.0",
