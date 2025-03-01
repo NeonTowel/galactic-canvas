@@ -1,0 +1,27 @@
+version: '3'
+
+tasks:
+  dev-api:
+    cmds:
+      - "cd api && yarn run dev"
+    desc: "Run API in development mode using wrangler."
+
+  deploy-api:
+    cmds:
+      - "cd api && yarn run deploy"
+    desc: "Deploy API with wrangler and minify."
+
+  dev-ui:
+    cmds:
+      - "cd ui && yarn run dev"
+    desc: "Run UI in development mode using vite."
+
+  build-ui:
+    cmds:
+      - "cd ui && yarn run build"
+    desc: "Build the UI using vite."
+
+  deploy-ui:
+    cmds:
+      - "cd ui && yarn run deploy"
+    desc: "Build and deploy the UI using wrangler pages." 

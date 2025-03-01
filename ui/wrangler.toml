@@ -1,7 +1,7 @@
-name = "galactic-canvas-dev-ui"
+name = "galactic-canvas-ui"
 pages_build_output_dir = ".svelte-kit/cloudflare"
 
 compatibility_date = "2025-02-20"
 observability = { enabled = true }
 
-vars = { BACKEND_URL = "https://canvas-dev.neontowel.dev" }
+vars = { BACKEND_URL = "https://canvas.neontowel.dev" }

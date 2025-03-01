@@ -1,5 +1,7 @@
 {
-  "name": "api",
+  "name": "canvas-api",
+  "license": "MIT",
+  "private": true,
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify"
