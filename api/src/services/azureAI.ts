@@ -10,7 +10,16 @@ interface AzureAIResponse {
   // Add other properties if necessary
 }
 
-export async function generateImage(prompt: string, endpoint: string, apiKey: string): Promise<string> {
+// Define types for size, style, and quality
+const validSizes = ["256x256", "512x512", "1024x1024", "1792x1024", "1024x1792"] as const;
+const validQualities = ["standard", "hd"] as const;
+const validStyles = ["vivid", "natural"] as const;
+
+type Size = typeof validSizes[number];
+type Quality = typeof validQualities[number];
+type Style = typeof validStyles[number];
+
+export async function generateImage(prompt: string, endpoint: string, apiKey: string, size: Size, style: Style, quality: Quality): Promise<string> {
   const client = new AzureOpenAI({
     endpoint,
     apiKey,
@@ -21,13 +30,11 @@ export async function generateImage(prompt: string, endpoint: string, apiKey: st
   try {
     const response = await client.images.generate({
       prompt: prompt,
-      size: "1792x1024",
+      size: size,
       n: 1,
-      quality: "hd",
-      style: "vivid"
+      quality: quality,
+      style: style
     });
-
-    console.log(response); // Log the response to inspect its structure
 
     return response.data[0].url || ''; // Adjust based on the actual response structure
   } catch (error) {

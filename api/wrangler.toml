@@ -1,12 +1,12 @@
-name = "galactic-canvas-dev-api"
+name = "galactic-canvas-api-dev"
 main = "src/index.ts"
 
-compatibility_date = "2025-02-20"
+compatibility_date = "2025-02-14"
 compatibility_flags = ["nodejs_compat"]
 
 workers_dev = false
 preview_urls = false
 
 routes = [
-  { pattern = "canvas.neontowel.dev/api/*", zone_name = "neontowel.dev" }
+  { pattern = "canvas-dev.neontowel.dev/api/*", zone_name = "neontowel.dev" }
 ]

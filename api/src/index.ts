@@ -43,13 +43,13 @@ app.get('/api', (c) => {
 })
 
 app.post('/api/generate-image', async (c) => {
-  const { prompt } = await c.req.json()
+  const { prompt, size, style, quality } = await c.req.json()
   if (!prompt) {
     return c.json({ error: 'Prompt is required' }, 400)
   }
 
   try {
-    const imageUrl = await generateImage(prompt, c.env.API_ENDPOINT, c.env.API_KEY)
+    const imageUrl = await generateImage(prompt, c.env.API_ENDPOINT, c.env.API_KEY, size, style, quality)
     return c.json({ imageUrl })
   } catch (error) {
     return c.json({ error: 'Failed to generate image' }, 500)
