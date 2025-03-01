@@ -37,8 +37,11 @@ export async function generateImage(prompt: string, endpoint: string, apiKey: st
     });
 
     return response.data[0].url || ''; // Adjust based on the actual response structure
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to call Azure API', error);
-    throw new Error('Failed to call Azure API');
+    const errorCode = error.response?.status || 'Unknown';
+    const errorDetail = error.response?.data?.error?.message || error.message || 'Failed to call Azure API';
+    const formattedError = `${errorCode} ${errorDetail}`;
+    throw new Error(formattedError);
   }
 } 

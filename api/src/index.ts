@@ -51,8 +51,9 @@ app.post('/api/generate-image', async (c) => {
   try {
     const imageUrl = await generateImage(prompt, c.env.API_ENDPOINT, c.env.API_KEY, size, style, quality)
     return c.json({ imageUrl })
-  } catch (error) {
-    return c.json({ error: 'Failed to generate image' }, 500)
+  } catch (error: any) {
+    const errorMessage = error.message || 'Failed to generate image'
+    return c.json({ error: errorMessage }, 500)
   }
 })
 
