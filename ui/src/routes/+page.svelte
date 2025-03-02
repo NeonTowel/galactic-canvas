@@ -83,15 +83,31 @@
       opacity: 0.5;
     }
   }
+
+  /* Responsive styles */
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.5rem;
+    }
+    p {
+      font-size: 1rem;
+    }
+    input, select, button {
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    .flex {
+      flex-direction: column;
+    }
+  }
 </style>
 
 <div class="flex flex-col min-h-screen">
   <div class="flex-grow flex flex-col items-center justify-center bg-gray-900 text-gray-200">
-    <h1 class="text-4xl font-bold mb-2">🚀 Galactic Canvas 🌌</h1>
+    <img src="logo.png" alt="Galactic Canvas Logo" class="mb-2 max-w-full h-auto" style="max-height: 100px;" />
     <p class="text-lg mb-6 text-center">
-      Dive into the cosmos with Galactic Canvas! 🚀✨<br>
-      Powered by Azure AI and DALL-E, our app lets you craft stellar visuals from mere words.<br>
-      Running smoothly on <a href="https://workers.cloudflare.com" target="_blank" class="text-blue-400 hover:text-blue-600">Cloudflare Workers</a>, our private <a href="https://azure.microsoft.com/en-us/products/ai-services/openai-service" target="_blank" class="text-blue-400 hover:text-blue-600">Azure OpenAI</a> ensures your creativity knows no bounds. Ready to paint the universe? 🌌
+      Craft stellar visuals from mere words with Galactic Canvas! 🚀✨<br>
+      Ready to paint the universe? 🌌
     </p>
     <input type="text" bind:value={prompt} placeholder="Enter a prompt" class="p-2 border border-gray-700 rounded mb-4 w-160 bg-gray-800 text-gray-200" on:keydown={(e) => { if (e.key === 'Enter') { e.preventDefault(); generateImage(); } }} />
     <div class="flex space-x-4 mb-4">
@@ -132,7 +148,8 @@
 
   <footer class="w-full text-center py-2 bg-gray-800 text-gray-400">
     <p>
-      Built by <a href="https://github.com/NeonTowel/galactic-canvas" target="_blank" class="text-blue-400 hover:text-blue-600">NeonTowel</a> 🚀✨ - Where code meets the cosmos!
+      Built by <a href="https://github.com/NeonTowel/galactic-canvas" target="_blank" class="text-blue-400 hover:text-blue-600">NeonTowel</a> 🚀✨ - Where code meets the cosmos!<br>
+      Powered by <a href="https://workers.cloudflare.com" target="_blank" class="text-blue-400 hover:text-blue-600">Cloudflare Workers</a> and private <a href="https://azure.microsoft.com/en-us/products/ai-services/openai-service" target="_blank" class="text-blue-400 hover:text-blue-600">Azure OpenAI</a>.
     </p>
   </footer>
 </div>
