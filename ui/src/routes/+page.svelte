@@ -18,6 +18,8 @@
     error = '';
     imageUrl = '';
 
+    console.log('Generating image with:', { size, style, quality });
+
     try {
       const response = await fetch('/api/generate-image', {
         method: 'POST',
