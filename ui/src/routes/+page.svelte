@@ -112,17 +112,17 @@
     <input type="text" bind:value={prompt} placeholder="Enter a prompt" class="p-2 border border-gray-700 rounded mb-4 w-160 bg-gray-800 text-gray-200" on:keydown={(e) => { if (e.key === 'Enter') { e.preventDefault(); generateImage(); } }} />
     <div class="flex space-x-4 mb-4">
       <select bind:value={size} class="p-2 bg-gray-800 text-gray-200 rounded">
-        <option value="1024x1024">1024x1024</option>
+        <option value="1024x1024" selected>1024x1024</option>
         <option value="1024x1792">1024x1792</option>
         <option value="1792x1024">1792x1024</option>
       </select>
       <select bind:value={style} class="p-2 bg-gray-800 text-gray-200 rounded">
-        <option value="natural">Natural</option>
+        <option value="natural" selected>Natural</option>
         <option value="vivid">Vivid</option>
       </select>
       <select bind:value={quality} class="p-2 bg-gray-800 text-gray-200 rounded">
+        <option value="standard" selected>Standard</option>
         <option value="hd">HD</option>
-        <option value="standard">Standard</option>
       </select>
     </div>
     <button on:click={generateImage} disabled={loading} class="bg-blue-600 text-white px-4 py-2 rounded disabled:opacity-50">
