@@ -296,7 +296,7 @@
       </select>
     </div>
     <div class="heading-box">
-      <span class="heading-label">Preset styles:</span>
+      <span class="heading-label">Art style:</span>
       <div class="icon-grid mb-4">
         {#each Object.keys(presetStyles) as style (style)}
           <button
