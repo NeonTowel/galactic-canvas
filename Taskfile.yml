@@ -3,7 +3,8 @@ version: '3'
 includes:
   dev: taskfile.dev.yaml
   prod: taskfile.prod.yaml 
+  git: taskfile.git.yaml
 
-task:
+tasks:
   default:
    - task --list-all

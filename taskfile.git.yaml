@@ -1,0 +1,14 @@
+version: '3'
+
+tasks:
+  update-devel-from-main:
+    cmds:
+      - git checkout dev
+      - git rebase main
+    desc: "Update devel branch from main branch [main -> devel]"
+
+  update-main-from-devel:
+    cmds:
+      - git checkout main
+      - git rebase devel
+    desc: "Update main branch from devel branch [devel -> main]"
