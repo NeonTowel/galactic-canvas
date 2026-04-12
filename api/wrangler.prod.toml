@@ -10,3 +10,7 @@ preview_urls = false
 routes = [
   { pattern = "canvas.neontowel.dev/api/*", zone_name = "neontowel.dev" }
 ]
+
+[vars]
+MODEL_NAME = "flux-2-pro"
+TEAM_DOMAIN = "https://alusta.cloudflareaccess.com"

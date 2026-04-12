@@ -3,25 +3,25 @@ version: 3
 tasks:
   dev-api:
     cmds:
-      - "cd api && yarn run start:prod"
+      - "cd api && bun run start:prod"
     desc: "[PROD] Run API in development mode using wrangler."
 
   deploy-api:
     cmds:
-      - "cd api && yarn run deploy:prod"
+      - "cd api && bun run deploy:prod"
     desc: "[PROD] Deploy API with wrangler and minify."
 
   dev-ui:
     cmds:
-      - "cd ui && yarn run start:prod"
+      - "cd ui && bun run start:prod"
     desc: "[PROD] Run UI in development mode using vite."
 
   build-ui:
     cmds:
-      - "cd ui && yarn run build"
+      - "cd ui && bun run build"
     desc: "[PROD] Build the UI using vite."
 
   deploy-ui:
     cmds:
-      - "cd ui && yarn run deploy:prod"
-    desc: "[PROD] Build and deploy the UI using wrangler pages." 
+      - "cd ui && bun run deploy:prod"
+    desc: "[PROD] Build and deploy the UI using wrangler pages."
