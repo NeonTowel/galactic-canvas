@@ -4,6 +4,12 @@
   type PresetStyleKey = keyof typeof presetStyles
   type StyleIntensity = 1 | 2 | 3
 
+  type SizePreset = {
+    value: string
+    width: number
+    height: number
+  }
+
   type ModelCapabilities = {
     model: 'dall-e-3' | 'flux-2-pro' | 'flux-1-kontext-pro'
     supportsStyleParam: boolean
@@ -25,25 +31,16 @@
     error?: string
   }
 
-  type ImportMetaWithToken = ImportMeta & {
-    env: {
-      TOKEN?: string
-    }
-  }
-
   let prompt = ''
   let imageUrl = ''
   let loading = false
   let error = ''
-  let apiKey = (import.meta as ImportMetaWithToken).env.TOKEN
 
   let capabilities: ModelCapabilities | null = null
   let capabilitiesLoading = true
   let capabilitiesError = ''
 
   let selectedSize = '1024x1024'
-  let selectedWidth = 1024
-  let selectedHeight = 1024
   let selectedAspectRatio = '1:1'
   let style = 'natural'
   let quality = 'standard'
@@ -133,6 +130,14 @@
     },
   }
 
+  const flux2SizePresets: SizePreset[] = [
+    { value: '1024x1024', width: 1024, height: 1024 },
+    { value: '1536x1024', width: 1536, height: 1024 },
+    { value: '1024x1536', width: 1024, height: 1536 },
+    { value: '1344x768', width: 1344, height: 768 },
+    { value: '768x1344', width: 768, height: 1344 },
+  ]
+
   function getIconForStyle(selectedStyle: string): string {
     switch (selectedStyle) {
       case 'Minimalist Low-Poly with Soft Glows':
@@ -161,28 +166,56 @@
   }
 
   function applyCapabilityDefaults(nextCapabilities: ModelCapabilities): void {
-    if (nextCapabilities.sizeMode === 'preset') {
-      selectedSize = nextCapabilities.sizeOptions?.[0] ?? '1024x1024'
+    if (nextCapabilities.model === 'flux-2-pro') {
+      selectedSize = nextCapabilities.sizeOptions?.[0] ?? flux2SizePresets[0]?.value ?? '1024x1024'
       return
     }
 
-    if (nextCapabilities.sizeMode === 'dimensions') {
-      selectedWidth = 1024
-      selectedHeight = 1024
+    if (nextCapabilities.sizeMode === 'preset') {
+      selectedSize = nextCapabilities.sizeOptions?.[0] ?? '1024x1024'
       return
     }
 
     selectedAspectRatio = nextCapabilities.aspectRatioOptions?.[0] ?? '1:1'
   }
 
-  async function loadCapabilities(): Promise<void> {
-    if (!apiKey) {
-      throw new Error('Missing TOKEN environment variable')
+  function parseSizePreset(sizePreset: string): { width: number; height: number } {
+    const match = sizePreset.match(/^(\d+)x(\d+)$/)
+
+    if (!match) {
+      throw new Error(`Invalid size preset: ${sizePreset}`)
     }
 
+    const width = Number(match[1])
+    const height = Number(match[2])
+
+    if (!Number.isInteger(width) || !Number.isInteger(height) || width <= 0 || height <= 0) {
+      throw new Error(`Invalid size preset: ${sizePreset}`)
+    }
+
+    return { width, height }
+  }
+
+  function getSizeOptions(currentCapabilities: ModelCapabilities): string[] {
+    if (currentCapabilities.model === 'flux-2-pro') {
+      return currentCapabilities.sizeOptions ?? flux2SizePresets.map((preset) => preset.value)
+    }
+
+    return currentCapabilities.sizeOptions ?? []
+  }
+
+  function getSelectedSizeDimensions(currentCapabilities: ModelCapabilities): { width: number; height: number } | null {
+    if (currentCapabilities.model !== 'flux-2-pro' && currentCapabilities.sizeMode !== 'preset') {
+      return null
+    }
+
+    return parseSizePreset(selectedSize)
+  }
+
+  async function loadCapabilities(): Promise<void> {
     const response = await fetch('/api/capabilities', {
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
       },
     })
 
@@ -269,13 +302,12 @@
 
     const body: Record<string, unknown> = { prompt: modifiedPrompt }
 
-    if (capabilities.sizeMode === 'preset') {
+    if (capabilities.model === 'flux-2-pro') {
+      const { width, height } = parseSizePreset(selectedSize)
+      body.width = width
+      body.height = height
+    } else if (capabilities.sizeMode === 'preset') {
       body.size = selectedSize
-    }
-
-    if (capabilities.sizeMode === 'dimensions') {
-      body.width = selectedWidth
-      body.height = selectedHeight
     }
 
     if (capabilities.sizeMode === 'aspect_ratio') {
@@ -299,7 +331,6 @@
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${apiKey}`,
         },
         body: JSON.stringify(body),
       })
@@ -453,37 +484,12 @@
       <div class="mb-4 text-red-500">{capabilitiesError}</div>
     {:else if capabilities}
       <div class="flex space-x-4 mb-4">
-        {#if capabilities.sizeMode === 'preset'}
+        {#if capabilities.model === 'flux-2-pro' || capabilities.sizeMode === 'preset'}
           <select bind:value={selectedSize} class="p-2 bg-gray-800 text-gray-200 rounded">
-            {#each capabilities.sizeOptions ?? [] as option}
+            {#each getSizeOptions(capabilities) as option}
               <option value={option}>{option}</option>
             {/each}
           </select>
-        {/if}
-
-        {#if capabilities.sizeMode === 'dimensions'}
-          <div class="flex space-x-2 items-center">
-            <label for="width" class="text-sm text-gray-400">Width</label>
-            <input
-              id="width"
-              type="number"
-              bind:value={selectedWidth}
-              min={capabilities.dimensions?.min}
-              max={capabilities.dimensions?.max}
-              step={capabilities.dimensions?.step}
-              class="p-2 bg-gray-800 text-gray-200 rounded w-24"
-            />
-            <label for="height" class="text-sm text-gray-400">Height</label>
-            <input
-              id="height"
-              type="number"
-              bind:value={selectedHeight}
-              min={capabilities.dimensions?.min}
-              max={capabilities.dimensions?.max}
-              step={capabilities.dimensions?.step}
-              class="p-2 bg-gray-800 text-gray-200 rounded w-24"
-            />
-          </div>
         {/if}
 
         {#if capabilities.sizeMode === 'aspect_ratio'}
@@ -509,13 +515,12 @@
         {/if}
       </div>
 
-      {#if capabilities.sizeMode === 'dimensions' && capabilities.dimensions}
-        <p class="mb-4 text-sm text-gray-400">
-          Current size: {selectedWidth} × {selectedHeight} ({getMegapixels(selectedWidth, selectedHeight).toFixed(2)} MP)
-          {#if getMegapixels(selectedWidth, selectedHeight) > capabilities.dimensions.maxMegapixels}
-            <span class="text-yellow-400"> — exceeds the recommended {capabilities.dimensions.maxMegapixels} MP limit.</span>
-          {/if}
-        </p>
+      {#if capabilities.model === 'flux-2-pro' || capabilities.sizeMode === 'preset'}
+        {#if getSelectedSizeDimensions(capabilities)}
+          <p class="mb-4 text-sm text-gray-400">
+            Selected size: {selectedSize} ({getMegapixels(getSelectedSizeDimensions(capabilities)!.width, getSelectedSizeDimensions(capabilities)!.height).toFixed(2)} MP)
+          </p>
+        {/if}
       {/if}
 
       {#if capabilities.supportsReferenceImage}

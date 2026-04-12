@@ -3,17 +3,17 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "start:dev": "wrangler dev --config wrangler.dev.toml",
-    "start:prod": "wrangler dev --config wrangler.prod.toml",
-    "deploy:dev": "wrangler deploy --config wrangler.dev.toml --minify",
-    "deploy:prod": "wrangler deploy --config wrangler.prod.toml --minify"
+    "start:dev": "bunx wrangler dev --config wrangler.dev.toml",
+    "start:prod": "bunx wrangler dev --config wrangler.prod.toml",
+    "deploy:dev": "bunx wrangler deploy --config wrangler.dev.toml --minify",
+    "deploy:prod": "bunx wrangler deploy --config wrangler.prod.toml --minify"
   },
   "dependencies": {
-    "hono": "^x.x.x"
+    "hono": "^x.x.x",
+    "jose": "^6.2.2"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250109.0",
     "wrangler": "^3.101.0"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  }
 }

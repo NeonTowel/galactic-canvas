@@ -1,4 +1,4 @@
-import { getModelPath, normalizeModelName, type ModelName } from './capabilities'
+import { getBodyModelName, getModelPath, normalizeModelName, type ModelName } from './capabilities'
 
 export type GenerateImageParams = {
   modelName: string
@@ -66,7 +66,10 @@ async function generateDallEImage(params: GenerateImageParams): Promise<string> 
 }
 
 async function generateFluxImage(params: GenerateImageParams & { modelName: ModelName }): Promise<string> {
+  // getBodyModelName returns the exact upstream Foundry display name (e.g. "FLUX.2-pro").
+  // getModelPath is kept for the URL path segment only — the two values differ.
   const requestBody: Record<string, unknown> = {
+    model: getBodyModelName(params.modelName as 'flux-2-pro' | 'flux-1-kontext-pro'),
     prompt: params.prompt,
     output_format: DEFAULT_OUTPUT_FORMAT,
     safety_tolerance: DEFAULT_SAFETY_TOLERANCE,

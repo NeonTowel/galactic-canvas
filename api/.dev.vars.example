@@ -1,3 +1,5 @@
 API_KEY=<azure-api-key>
 API_ENDPOINT=<azure-api-endpoint>
 MODEL_NAME=flux-2-pro
+TEAM_DOMAIN=https://<your-team-name>.cloudflareaccess.com
+POLICY_AUD=<access-policy-audience>
